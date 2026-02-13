@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botão Link Formulário</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* BOTÃO FIXO - CENTRALIZADO NO MEIO */
+    .btn-fixed-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 999;
+      width: auto;
+      padding: 0 12px;
+    }
+
+    .btn-main {
+      position: relative;
+      padding: 10px 24px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: linear-gradient(135deg, #e31837 0%, #b8102c 50%, #8b0a1f 100%);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 
+        0 4px 15px rgba(227, 24, 55, 0.4),
+        0 0 30px rgba(227, 24, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .btn-main:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 
+        0 8px 25px rgba(227, 24, 55, 0.5),
+        0 0 40px rgba(227, 24, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-main:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn-main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      50%, 100% { left: 100%; }
+    }
+
+    .btn-main::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 52px;
+      background: linear-gradient(135deg, #ffffff 0%, #e31837 50%, #ffffff 100%);
+      z-index: -1;
+      opacity: 0.5;
+      animation: borderGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes borderGlow {
+      0% { opacity: 0.3; }
+      100% { opacity: 0.7; }
+    }
+
+    .btn-text {
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .btn-main {
+        padding: 9px 20px;
+        font-size: 12px;
+        letter-spacing: 0.3px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .btn-main {
+        padding: 8px 18px;
+        font-size: 11px;
+        letter-spacing: 0.3px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .btn-main {
+        padding: 12px 32px;
+        font-size: 14px;
+      }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full m-0 p-0" style="background: transparent;"><!-- BOTÃO FIXO -->
+  <div class="btn-fixed-container"><a id="form-link-btn" href="https://forms.gle/NoSoehUqRHL4SdVP8" target="_blank" rel="noopener noreferrer" class="btn-main"> <span class="btn-text" id="button-text">Acessar Formulário</span> </a>
+  </div>
+  <script>
+    // Element SDK Config
+    const defaultConfig = {
+      button_text: 'Acessar Formulário',
+      form_url: 'https://forms.gle/NoSoehUqRHL4SdVP8'
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = { ...defaultConfig, ...newConfig };
+      
+      const buttonText = document.getElementById('button-text');
+      const formLink = document.getElementById('form-link-btn');
+      
+      if (buttonText) {
+        buttonText.textContent = config.button_text || defaultConfig.button_text;
+      }
+      
+      if (formLink) {
+        formLink.href = config.form_url || defaultConfig.form_url;
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['button_text', config.button_text || defaultConfig.button_text],
+        ['form_url', config.form_url || defaultConfig.form_url]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    } else {
+      onConfigChange(defaultConfig);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cd6687a02977268',t:'MTc3MTAwNzU0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
